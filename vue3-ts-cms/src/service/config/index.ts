@@ -14,5 +14,6 @@ if (import.meta.env.PROD) {
   BASE_URL = 'http://localhost:8000'
 }
 
+console.log(import.meta.env.VITE_UTL)
 console.log(BASE_URL)
 export { BASE_URL }
