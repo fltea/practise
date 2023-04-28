@@ -1,8 +1,14 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1>INDEX</h1>
-  <router-view></router-view>
+  <div class="app">
+    <router-view></router-view>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="less">
+.app {
+  width: 100vw;
+  height: 100vh;
+}
+</style>
