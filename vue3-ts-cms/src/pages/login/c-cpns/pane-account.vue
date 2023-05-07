@@ -15,9 +15,8 @@ const formRules: FormRules = {
       trigger: 'blur',
     },
     {
-      min: 6,
-      max: 20,
-      message: '必須是 6-20 位長度',
+      pattern: /^[a-z0-9]{6,20}$/,
+      message: '必須是 6-20 位数字或字母组成',
       trigger: 'blur',
     },
   ],
@@ -29,8 +28,8 @@ const formRules: FormRules = {
     },
     {
       pattern: /^[a-z0-9]{3,}$/,
-      message: '必須是 3 位以上的字母或數組',
-      trigger: 'change',
+      message: '必須是 3 位以上的字母或數字',
+      trigger: 'blur',
     },
   ],
 }
@@ -57,8 +56,4 @@ defineExpose({
   </section>
 </template>
 
-<style lang="less" scoped>
-.pane-account {
-  color: red;
-}
-</style>
+<style lang="less" scoped></style>

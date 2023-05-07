@@ -6,12 +6,13 @@ import PanePhone from './pane-phone.vue'
 const isKeep = ref(false)
 const activeName = ref('account')
 const paneAccount = ref<InstanceType<typeof PaneAccount>>()
+const panePhone = ref<InstanceType<typeof PanePhone>>()
 
 function handleLoginBtnClick() {
   if (activeName.value === 'account') {
     paneAccount.value?.accountActions()
   } else {
-    console.log('phone')
+    panePhone.value?.phoneActions()
   }
 }
 </script>
@@ -37,7 +38,7 @@ function handleLoginBtnClick() {
               <span class="text">手機登錄</span>
             </div>
           </template>
-          <pane-phone></pane-phone>
+          <pane-phone ref="panePhone"></pane-phone>
         </el-tab-pane>
       </el-tabs>
     </div>
