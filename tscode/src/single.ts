@@ -44,10 +44,20 @@
  * 
  */
 export default class MyLocalStorage {
+  // 靜態成員 = 靜態方法 + 靜態屬性 
+  // 靜態成員與對象無關
 
   // 靜態方法不可以訪問實例屬性或實例方法【對象屬性】
   // 靜態屬性和對象屬性是類中兩大屬性
-  static localstorage: MyLocalStorage
+  static localstorage: MyLocalStorage // 靜態引用屬性
+  static count: number = 3; // 靜態基本類型屬性
+  // static 限制外部是否能訪問
+  // 任何一個 TS 類中的靜態成員存儲在內存的靜態區，
+  // 運行一個 TS 類，TS 首先回位靜態成員開劈內存空間，靜態成員的內存空間分配的時間要早於對象空間的分配，也就是任何一個對象創建之前 TS 就已經為靜態成員分配好了空間
+  // 但一個靜態方法只會分配一個空間，只要當前服務器不重啟或控制台程序還沒有結束之前【如果是開發期間臨時測試，一般用控制台】，
+  // 那麼靜態方法就一直存在內存空間，無論調用多少次這個靜態方法，都是調用的同一塊空間。
+
+  // 靜態
 
   private constructor(){
     console.log('這是TS的單間設計模式的靜態方法的構造器');
@@ -72,7 +82,14 @@ export default class MyLocalStorage {
     // }
     // return localstorage;
 
+    // 靜態方法不能訪問類中原型對象上的方法或者對象屬性【對象基本類型屬性 + 對象引用屬性】，反之亦然
+    // Error: 类型“typeof MyLocalStorage”上不存在属性“getItem”。
+    // this.getItem()
+
+    // 懶式單件設計模式： 真正用到類的實例才創建這個唯一的對象
+    // 靜態方法調用靜態屬性
     if(!this.localstorage) {
+      // 一個靜態方法改變了某個靜態屬性，其他靜態方法或類外部任何地方訪問這個屬性都會發生改變。
       this.localstorage =  new MyLocalStorage();
     }
     return this.localstorage;
