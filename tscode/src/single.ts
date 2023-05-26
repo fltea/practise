@@ -59,7 +59,7 @@ export default class MyLocalStorage {
 
   // 靜態
 
-  private constructor(){
+  private constructor() {
     console.log('這是TS的單間設計模式的靜態方法的構造器');
   }
 
@@ -70,6 +70,37 @@ export default class MyLocalStorage {
   // 2. 靜態方法和對象無關，外部的對象變量不能調用靜態方法和靜態屬性
   // 3. 外部可以通過類目來調用
   
+  /**
+   * 靜態方法或屬性 和圓形對象空間上的 方法和屬性 區別
+   * 1. 原型對象空間上的方法和屬性用來提供給該類的所有對象變量共用的方法和屬性，沒有對象和對象變量，原型上的屬性和方法就沒有了用武之地
+   * 2. 靜態方法或靜態屬性屬於類，可以直接通過類來訪問
+   * 3. 任何一個對象創建之前 TS 就已經為靜態成員分配好了空間
+   * 4. 一個靜態方法或靜態屬性只會分配一個空間，每一個對象都有自己的空間
+   * 
+   * 
+   * 靜態方法可以接受一個對象變量來作為方法的參數
+   * 1. 靜態方法內部不能通過 this 來訪問對象屬性和方法 
+   * 2. 可以通過調用靜態方法把對象變量傳遞給靜態方法使用
+   * 例： js 的 Object 想象成一個 TS 類【實際 TS 編譯之後的 JS 文件中就變成了一個構造函數】
+   *      Object 類中存在大量靜態方法： apply call bind keys ...
+   *     【keys 獲取給定對象的自身可枚舉屬性組成的數組】
+   * 
+   */
+
+  // keys 例
+  // let obj = new Object({username: 'erer', age: 23}) 
+  // let obj2 = {username: 'erer', age: 23} // 簡寫 
+  // console.log(Object.keys(obj2))
+
+
+  /**
+   * 何時定義靜態屬性？
+   * 1. 單件設計模式 
+   * 2. 類中某個方法沒有任何必要使用任何對象屬性時，而且使用了對象屬性反而讓這個方法的邏輯不正確，那麼就應該禁止這個方法訪問任何屬性和其他其他的對象方法，這時就應該把這個方法定義為靜態方法
+   * 3. 當一個類中某個方法只有一個或者1-2個對象屬性，而且更重要的是，創建這個類的對象毫無意義，只需要使用這個類的一個或多方法就可以了，那麼這個方法就應該定義為靜態方法。
+   *    常見的工具類中的方法通常都應該定義為靜態方法，比如 StringUtil FileUtil 等。
+   */
+  // FileUtil 例
 
   public static getInstance() {
     // 重複 new  不是單件
@@ -104,3 +135,11 @@ export default class MyLocalStorage {
     return  value != null ? JSON.parse(value) : null
   }
 }
+
+// TS 屏蔽了 new 一個類中的方法
+// Error: 其目标缺少构造签名的 "new" 表达式隐式具有 "any" 类型。
+// let oo = new MyLocalStorage.getInstance();
+
+// 只能覆蓋原有的函數，不能新增函數
+// Error: 类型“MyLocalStorage”上不存在属性“vv”。
+// MyLocalStorage.prototype.vv = function(){}
