@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./three.js"></script>
+  <script src="./OrbitControls.js"></script>
+</head>
+<body>
+  <script>
+    // console.log(THREE.Scene)
+    // 創建三維場景
+    const scene = new THREE.Scene();
+    // 創建幾何體
+    const box = new THREE.BoxGeometry(100, 100, 100);
+    // 材質
+    // const mater = new THREE.MeshBasicMaterial({
+    //   color:0xff0000,
+    // })
+    const mater = new THREE.MeshLambertMaterial({
+      color:0xff0000,
+      transparent: true,
+      opacity: 0.5,
+    })
+    // 虛擬網格
+    const mesh = new THREE.Mesh(box,mater)
+    // mesh.position.set(0,10,0);
+    scene.add(mesh)
+    // mesh.rotateY(Math.PI/4)
+
+    // 光纖
+    const light = new THREE.AmbientLight(0xffffff, 0.5)
+    scene.add(light)
+    const plight = new THREE.PointLight(0xffffff, 0.5)
+    plight.position.set(200,300,400)
+    scene.add(plight)
+
+
+    // 坐標系
+    const apler = new THREE.AxesHelper(150)
+    scene.add(apler)
+
+    // 相機
+    // 定义相机输出画布的尺寸(单位:像素px)
+    const width = 800; //宽度
+    const height = 500; //高度
+    // 30:视场角度, width / height:Canvas画布宽高比, 1:近裁截面, 3000：远裁截面
+    const camera = new THREE.PerspectiveCamera(40, width / height, 1, 3000);
+    // const camera = new THREE.PerspectiveCamera()
+    camera.position.set(200,200,200)
+    //相机观察目标指向Threejs 3D空间中某个位置
+    // camera.lookAt(0, 0, 0); //坐标原点
+    camera.lookAt(mesh.position);//指向mesh对应的位置
+
+    // 创建渲染器对象
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height); //设置three.js渲染区域的尺寸(像素px)
+    renderer.render(scene, camera); //执行渲染操作
+    document.body.appendChild(renderer.domElement);
+
+    // 相機控件
+    const controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls.addEventListener('change', function () {
+      renderer.render(scene, camera)
+    })
+
+    const clock = new THREE.Clock();
+
+    function render () {
+      // const spt = clock.getDelta() * 1000;
+      // console.log(spt, 1000/spt)
+      renderer.render(scene, camera); //执行渲染操作
+      mesh.rotateY(0.05)
+      requestAnimationFrame(render)
+    }
+    render()
+  </script>
+  <!-- <script type="module">
+    import * as THREE from "./three.module.js";
+    console.log(THREE)
+  </script> -->
+</body>
+</html>
