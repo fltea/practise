@@ -74,7 +74,7 @@ Model  <-----------  ViewModel  <----------- View
 
 - v-model
 
-**修飾符**：
+**修飾符**：.number .trim .lazy
 
 ### 條件渲染指令
 
@@ -136,3 +136,158 @@ watch: {
 ```
 
 ## 計算屬性
+
+通過一系列運算之後，得到一個屬性值
+
+定義時定義為方法，需要帶返回值，使用時可以當普通的屬性使用，可以在模版和 methods 中使用
+
+實現了代碼的複用，依賴的數據源變化也會跟著變化
+
+## axios
+
+專注於網絡請求的庫，返回值是一個 Promise 對象，會在返回數據外面再套一層數據，config、headers、request、status、statusText，實際返回數據為 data
+
+``` js
+
+axios.get(url, {
+  params:{}
+})
+
+axios.post(url, data={})
+
+```
+
+## SPA
+
+單頁面應用程序（Single Page Application），簡稱 SPA ，指的是一個 Web 網站只有一個唯一的 HTML 頁面，所有的功能和交互都在這個頁面內完成。
+
+### vue-cli
+
+Vue.js 開發的標准工具，簡化了程序員基於 webpack 創建工程化的 Vue 項目的過程。
+
+``` js
+
+npm install -g @vue/cli
+
+vue create name
+
+```
+
+### vue 組件
+
+- template 唯一根節點
+- script
+- style  scoped /deep/ 深度選擇器
+
+組件裡面的 data 不能指向對象，必須是函數返回一個包含屬性的對象
+
+**Props**： 組件的自定義屬性，在封裝通用組件的時候，合理地使用 props 可以極大的提高組件的復用性。
+
+``` js
+props:['name']
+props: {
+  name : {
+    // 配置項
+  }
+}
+props:{
+  name： {
+    default: 0,
+    required: true,
+    type: Number,
+  }
+}
+
+```
+
+## 生命周期
+
+一個組件從創建 -> 運行 -> 銷毀的整個階段，強調的是一個時間段。
+
+**生命周期函數**：有 vue 框架提供的內置函數，會伴隨著組件的生命週期，自動按順序執行。
+
+> 創建
+
+- new Vue()
+
+- beforeCreate
+- created
+- beforeMount
+- mounted
+
+> 運行
+
+- beforeUpdate
+- updated
+
+> 銷毀
+
+- beforeDestroy
+- destroyed
+
+### 生命周期流程
+
+1. new Vue() 創建組件的實例對象
+1. init Events& Lifecycle 初始化時間和生命周期函數
+1. beforeCreate 函數  **組件的 props/data/methods 尚未被創建，都處於不可使用狀態**
+1. init Injections & reactivity 初始化 props、data、methods
+1. created 函數   **組件的 props/data/methods 已創建好，處於可用狀態，但是組件模板結構尚未創建**  可調用 methods 中方法請求服務器數據賦值給 data 中的屬性
+1. Has 'el' option ---------> YES 直接進行下一步  ----------> No when vm.$mount(el) is called 執行下一步
+1. Has 'template' option ---------> YES Compile template into render function  ---------> NO Compile el's outHTML as template **基於數據和模板在內存中編譯生成 HTML 結構**
+1. beforeMount 函數 **將要把內存編譯好的 HTML 結構渲染到瀏覽器中，此時瀏覽器中還沒有當前組件的 DOM 結構**
+1. Create vm.$el and replace 'el' width it 用內存中編譯生成的 HTML 結構替換掉 el 屬性綁定的 DOM 元素
+1. mounted 已經把內存中的 HTML 結構成功渲染到了瀏覽器，此時瀏覽器中已包含當前組件的 DOM 結構。**操作 DOM 的最早時機**
+1. Mounted 後
+    ---------> when data changes  **循環**
+
+    1. beforeUpdate 將要根據變化過後、最新的數據，重新渲染組件的模版結構
+    1. Virtual DOM re-render and patch 根據最新的數據，重新渲染組件的 DOM 結構
+    1. updated 已經根據最新的數據，完成了組件 DOM 結構的重新渲染
+
+1. when vm.$destroy() is called
+1. beforeDestroy 將要銷毀組件，此時尚未銷毀，組件還處於**正常工作**的狀態
+1. Teardown wathers, chid components and event listeners 銷毀當前組件的數據偵聽器、子組件、事件監聽
+1. destroyed **已經銷毀組件，組件在瀏覽器中對應的 DOM 結構已被完全移除**
+
+## 組件數據共享
+
+- props
+- 自定義事件  內層：vm.$emit(name, options)  外層： @name=handle
+- eventBus
+    1. 創建 eventBus
+    1. 組件綁定事件
+    1. 組件觸發事件
+
+    ``` js
+      // eventBus.js
+      export default new Vue()
+
+      // components A 
+      import bus from 'eventBus.js'
+      ...
+      created() {
+        bus.$on('name', val => {
+          // code
+        })
+      }
+
+      // components B
+      import bus from 'eventBus.js'
+      ...
+      fn() {
+        bus.$emit('name', val)
+      }
+
+    ```
+
+## ref 引用
+
+vue 實例包含一個 $refs 對象，裡面存儲這對應的 DOM 元素或組件的引用，默認情況下組件的 $refs 指向一個空對象。
+
+**$nextTick(cb)**： 把 cb 回調推遲到下一個 DOM 更新周期之後執行。
+
+****：
+****：
+
+``` js
+```
