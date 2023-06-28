@@ -1,99 +1,138 @@
-# VUE
+# Vue
 
-模塊化：JS CSS 資源
-組件化：複用 UI 機構、樣式、行為
-規範化：目錄結構的劃分 編碼規范化 接口規範化 文檔規范化 git 分支管理
-自動化：自動化構建 自動部署 自動化測試
+用於構建用戶界面的前端框架。
 
-grunt
-gulp
+**於構建用戶界面**：往 html 頁面中填充數據，非常方便
 
-parcel
-webpack
+**框架**：框架是一套現成的解決方案，程序員只能遵守框架的規範，去編寫自己的業務功能。學習 VUE，就是學習 Vue 框架中規定的寫法（Vue 的指令、組件[對 UI 結構的複用]、路由、Vuex）
 
-## webpack
+## 2大特性
 
-前端工程化的具體解決方案（模塊化開發、代碼壓縮混淆、 JS 兼容性、 性能優化）
+### 數據驅動視圖
 
-``` shell
-npm install webpack webpack-cli -D
-```
+vue 會監聽數據的變化，從而自動重新渲染頁面的結構[ 單向的數據綁定 ]
 
-### webpack 配置 webpack.config.js
+### 雙向數據綁定
 
-**mode** : development/production
+> form 負責采集數據  Ajax 負責提交數據
 
-webpack 4.x 和 5.x 默認配置
-輸入文件： src -> index.js
-輸出文件： dist -> main.js
+在填寫表單時，雙向數據綁定可以輔助開發者在不操作 DOM 的前提下，自動把用戶填寫的內容填充到數據源中
 
-**插件自動刷新頁面**:
-npm install webpack-dev-server html-webpack-plugin -D  
+## MVVM
 
-``` json
-  "scripts": {
-    "dev": "webpack serve"
-  },
+MVVM 是 Vue 實現數據驅動視圖和雙向數據綁定的核心原理。 MVVM 指的是 Model、View 和 ViewModel，把每個 html 頁面都拆分成這三個部分。
+        監聽數據變化                     自動更新
+Model  ----------->  ViewModel  -----------> View
+Model  <-----------  ViewModel  <----------- View
+        自動同步                         監聽 Dom 變化
 
-```
+**ViewModel**：MVVM 的核心，把數據源（Model）和視圖（View）鏈接在了一起，是 Vue 的實例。
+但數據源發生變化時，會被 ViewModel 監聽到， VM 會根據最新的數據源自動更新頁面的結構
+當表單元素的值發生變化時，也會被 VM 監聽到， VM 會把變化過後的最新值自動同步到 Model 數據源中
+
+## 版本
+
+1.x 已淘汰
+2.x 主流
+3.x 20200919發佈
+
+## 指令
+
+模版語法，輔助開發者渲染頁面的基本結構，支持綁定簡單數值和 JavaScript 表達式的運算
+
+### 內容渲染指令
+
+渲染 DOM 元素的文本內容
+
+- v-text 會覆蓋內容
+- v-html 插入 html 內容，會覆蓋內容
+- {{ }} 插值表達式
+  1. 內容的佔位符，不會覆蓋內容，實際應用最多
+  2. 只能用在元素的內容節點中，不能用在屬性節點中
+
+### 屬性綁定指令
+
+- v-bind 綁定動態屬性值 可以簡寫為英文的 :
+
+### 事件綁定指令
+
+- v-on:name 綁定事件 可以簡寫為英文的 @name
+
+**傳參**：可以用 $event
+
+**事件修飾符**：
+.prevent 阻止默認行為 e.preventDefault()
+.stop  阻止冒泡 e.stopPropagation()
+.capture  捕獲方式觸發當前事件處理函數
+.once  只觸發一次
+.self  只有在 event.target 是當前元素自身時觸發事件處理函數
+
+**按鍵修飾符**：
+.enter
+
+### 雙向綁定指令
+
+- v-model
+
+**修飾符**：
+
+### 條件渲染指令
+
+- v-if  創建或移除元素，元素初始不需要顯示且後面不需要頻繁使用時，推薦使用
+- v-show  使用樣式 display 控制，需要頻繁切換時，推薦使用
+
+在實際開發中，大多數情況不需要考慮性能，使用 v-if
+
+- v-else-if
+- v-else
+
+需要配合 v-if 使用
+
+### 列表渲染指令
+
+- v-for
+
+## 過濾器
+
+常用於文本的格式化, 可以連續調用多個過濾器（vue3 不支持）
+
+**插值表達式**：{{ message | handler(arg1, arg2) | 過濾器2 | 過濾器3 }}
+
+**v-bind 屬性綁定**：:id="message | 過濾器"
 
 ``` js
-const HtmlPlugin = require('html-webpack-plugin')
-const htmlPlugin = new HtmlPlugin({
-  template: './src/index.html',
-  filename: 'index.html'
-})
-
-...
-plugins:[htmlPlugin],
-...
-
-```
-
-**devServer**: server 配置，打包後打開瀏覽器
-
-**loader**：webpack 默認只能打包處理 js 後綴結尾的模塊。其他非 .js 後綴結尾的模塊 webpack 默認處理不了，需要調用 loader 加載器才可以正常打包，否則報錯！
-**loader**: 按順序( cssloader -> styleloader )處理文件後合並到打包文件 js 裡。
-
-> css  
-
-ERROR in ./src/index.css 1:3
-Module parse failed: Unexpected token (1:3)
-You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
-\> li {
-|   list-style: none;
-| }
- @ ./src/index.js 3:0-20
-
-npm install style-loader@3.0.0 css-loader@5.2.6 -D  
-
-``` js
-
-  // 第三方文件模塊的匹配規則
-  module: {
-    // 文件後綴名的匹配規則
-    rules: [
-      // 文件類型                loader
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
-    ]
+filters: {
+  handler(val,arg1, arg2) {
+    return `${val | ''} result`;
   }
-
+}
 ```
 
-> less
+## 監聽器
 
-npm i  less-loader@10.0.1 less@4.1.1 -D
+本質上是一個函數，想要監聽哪個數據的變化，就把數據名作為方法名
 
-> image
+``` js
+watch: {
+  handle(val, oldVal) {
+    
+  }
+}
+```
 
-ERROR in ./src/img/ethical declarations.jpg 1:0
-Module parse failed: Unexpected character '�' (1:0)
-You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
-(Source code omitted for this binary file)
- @ ./src/index.js 7:0-48 8:25-28
+無法進入頁面立即執行，可以通過配置屬性
 
-npm install url-loader@4.1.1 file-loader@6.2.0 -D
+``` js
+watch: {
+  handle： {
+    // 是否自動觸發一次
+    immediate: true,
+    // 是否深度監聽
+    // 對象的屬性改變就會觸發
+    deep: true,
+    handler(val, oldVal){}
+  }
+}
+```
 
-> 新語法特性
-
-npm i babel-loader@8.2.2 @babel/core@7.14.6 @babel/plugin-proposal-decorators@7.14.5 -D
+## 計算屬性
