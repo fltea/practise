@@ -286,8 +286,82 @@ vue 實例包含一個 $refs 對象，裡面存儲這對應的 DOM 元素或組�
 
 **$nextTick(cb)**： 把 cb 回調推遲到下一個 DOM 更新周期之後執行。
 
-****：
-****：
+## 動態組件
+
+``` html
+<component is="name"></component> 
+```
+
+### keep-alive
+
+把內部的組件進行緩存，保持組件狀態
+
+``` html
+<keep-alive include="name1,name2" exclude="name3,name4">
+  <component is="name"></component>
+</keep-alive> 
+```
+
+**include**（被緩存）  **exclude**（不被緩存） 不能同時使用這兩個屬性
+**生命周期**： deactivated（被緩存） activated（被激活，組件被創建時也會被 執行激活）
+
+## 插槽
+
+vue 為組件的封裝者提供的功能，允許開發者在封裝組件時，把不確定的、希望由使用者指定的部分定義為插槽。
+slot 的 name 屬性，默認值為 default
+
+v-slot 只能使用在 component 上或者 template （高級語法），簡寫形式為 #
+
+組件內部直接使用個 slot 標籤
+
+``` html
+<!-- template 不會渲染 -->
+<template v-slot:default="item">
+  <p>內容</p>
+  <!-- hellow vue.js -->
+  <p>{{ item.msg }}</p> 
+</template>
+
+<!-- 在封裝組件時，為預留的 slot 提供屬性對應的值，這種用法，叫做“作用域插槽” -->
+<slot name="default" msg="hellow vue.js">可以提供默認內容</slot>
+```
+
+## 自定義指令
+
+### 私有自定義指令
+
+在每個 vue 組件中，可以在 directives 定義私有自定義指令
 
 ``` js
+//  <p v-color>item.msg</p> 
+
+directives: {
+  color: {
+    // 第一次被綁定到元素上，觸發
+    bind(el, binding) {
+      // el 綁定的元素
+      // binding 指令的綁定配置、屬性
+      // value  expression 
+      // code
+    },
+    // Dom 更新的時候觸發
+    update(el, binding) {
+      // el 綁定的元素
+      // binding 指令的綁定配置、屬性
+      // value  expression 
+      // code
+    },
+  }
+  // 簡寫
+  color(el, binding){
+    // el 綁定的元素
+    // binding 指令的綁定配置、屬性
+    // value  expression 
+    // code
+  }
+}
 ```
+
+### 全局自定義指令
+
+Vue.directive(name, handle);
