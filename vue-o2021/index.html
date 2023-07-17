@@ -13,6 +13,12 @@
     // umd Vue
     // console.log(Vue)
     // 響應式 vue2 mvvm
+
+    Vue.Mixin({
+      created(){
+        console.log('mixin created')
+      }
+    })
     const vm = new Vue({
       el:'#app',
       data() {
@@ -27,7 +33,9 @@
           newsl: [{a:2}]
         }
       },
-
+      created(){
+        console.log('created 343dfgfkgj lfgk 454545')
+      }
     })
 
     // console.log(vm._data.a = {c:30})
@@ -38,6 +46,10 @@
     // 初次渲染 ===> 初始化數據 ===> 模版編譯 ===> 變成 render() ===> 生成虛擬節點 ===> 變成真實 DOM ===> 放到頁面
 
     // 模版編譯 template render el(必須存在) render() template 
+
+    // vue 生命週期  實現原理 源碼實現
+    // Vue.mixin({  })  混入
+    // 設計模式 訂閱發佈  vue options{data:[],watch:[]}
   </script>
 </body>
 </html>

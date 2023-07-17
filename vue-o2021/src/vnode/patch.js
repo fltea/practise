@@ -1,8 +1,8 @@
 export function patch(oldVnode, vnode) { 
-  console.log(oldVnode, vnode)
+  // console.log(oldVnode, vnode)
   // 創建真實 DOM
   const el = createEl(vnode);
-  console.log(el)
+  // console.log(el)
 
   const parentEl = oldVnode.parentNode
   parentEl.insertBefore(el, oldVnode.nextsibling);

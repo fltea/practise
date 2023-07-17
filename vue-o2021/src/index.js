@@ -1,3 +1,4 @@
+import { initGlobApi } from "./global-api/index";
 import { initMaixin } from "./init";
 import { lifecycleMixin } from "./lifecycle";
 import { renderMixin } from "./vnode/index";
@@ -7,7 +8,10 @@ function Vue(options) {
 }
 
 initMaixin(Vue)
-lifecycleMixin(Vue)
-renderMixin(Vue)
+lifecycleMixin(Vue) // 添加生命周期
+renderMixin(Vue) // render 函數
+
+// 全局方法 Vue.mixin Vue.component Vue.extend 
+initGlobApi(Vue)
 
 export default Vue;
