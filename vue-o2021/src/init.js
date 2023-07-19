@@ -1,17 +1,22 @@
 import { compileToFunction } from "./compile/index";
 import { initState } from "./initState";
-import { mountComponent } from "./lifecycle";
+import { callHook, mountComponent } from "./lifecycle";
+import { mergeOptions } from "./utils/index";
 
 export function initMaixin(Vue) {
   Vue.prototype._init = function(options) {
     // console.log(options)
 
     let vm = this;
-    vm.$options = options;
+    vm.$options = mergeOptions(Vue.options, options);
+
+    callHook(vm, 'beforeCreate')
 
     // 初始化狀態
     initState(vm)
 
+    callHook(vm, 'created')
+    
     // 渲染模版
     if(vm.$options.el) {
       vm.$mount(vm.$options.el)

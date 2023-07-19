@@ -11,7 +11,9 @@ export const HOOKS = [
 
 // 策略模式
 const starts = {}
-starts.data = function () {}
+starts.data = function (parentVal, childVal) {
+  return childVal
+}
 starts.computed = function () {}
 starts.watch = function () {}
 starts.methods = function () {}
@@ -34,7 +36,6 @@ function mergeHooks(parentVal, childVal) {
 }
 
 export function mergeOptions(parent, child) {
-  console.log(parent, child)
   const options = {};
   for (const key in parent) {
     mergeField(key)

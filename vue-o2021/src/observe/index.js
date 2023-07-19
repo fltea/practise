@@ -1,4 +1,5 @@
 import { ArrayMethods } from "./arr";
+import Dep from "./dep";
 
 export function observer (data) {
   // console.log(data)
@@ -14,8 +15,10 @@ export function observer (data) {
 
 class Observer {
   constructor(value) {
+    this.dep = new Dep();
     Object.defineProperty(value, '__ob__', {
       enumerable: false, // 不能枚舉
+      configurable: false,
       value: this,
     })
     // console.log(value)
@@ -50,15 +53,24 @@ class Observer {
 
 function defineReactive(data, key, value) {
   // 遞歸 設置
-  observer(value) // 深度代理
+  let childDep = observer(value) // 深度代理
+  let dep = new Dep();
   Object.defineProperty(data, key, {
     get() {
+      // console.log('childDep',childDep,Dep.target)
+      if(Dep.target) {
+        dep.depend()
+        if(childDep.dep) {
+          childDep.dep.depend()
+        }
+      }
       return value;
     },
     set(newValue) {
       if(newValue === value) return;
       observer(newValue) 
       value = newValue;
+      dep.notify()
     }
   })
 }

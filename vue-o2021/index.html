@@ -6,7 +6,7 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="app" style="color: red;font-size: 20px">hello {{ msg }} <h1>kewq</h1>{{ msg1 }} </div>
+  <div id="app" style="color: red;font-size: 20px">hello {{ msg }} <h1>kewq</h1>{{ list }} </div>
   <!-- <div id="app">hello {{ msg }} <h1>666 <span>34343</span></h1></div> -->
   <script src="dist/vue.js"></script>
   <script>
@@ -14,11 +14,21 @@
     // console.log(Vue)
     // 響應式 vue2 mvvm
 
-    Vue.Mixin({
-      created(){
-        console.log('mixin created')
-      }
-    })
+    // Vue.Mixin({
+    //   created(){
+    //     console.log('mixin created')
+    //   }
+    // })
+    // Vue.Mixin({
+    //   created(){
+    //     console.log('mixin created 2')
+    //   }
+    // })
+    // Vue.Mixin({
+    //   created(){
+    //     console.log('mixin created 3')
+    //   }
+    // })
     const vm = new Vue({
       el:'#app',
       data() {
@@ -34,7 +44,10 @@
         }
       },
       created(){
-        console.log('created 343dfgfkgj lfgk 454545')
+        // console.log('created 343dfgfkgj lfgk 454545')
+      },
+      updated(){
+        console.log('updated 343dfgfkgj lfgk 454545')
       }
     })
 
@@ -50,6 +63,26 @@
     // vue 生命週期  實現原理 源碼實現
     // Vue.mixin({  })  混入
     // 設計模式 訂閱發佈  vue options{data:[],watch:[]}
+
+    setTimeout(() => {  // nextTick
+      vm.msg = '數據變化'
+      vm.list.push(34)
+    }, 1000);
+    vm.$nextTick(() => {
+      console.log('nextTick', vm.$el.innerHTML)
+    })
+    // 數據變化 vm._update(vm._render())
+    //  vue 中更新組件策略是 以組件為單位，個每一個組件添加一個 watcher ，屬性變化後，調用者 watcher
+
+    // 實現對象收集依賴
+    // dep 和 watcher 關係 多對多  computed
+
+    // 數組收集
+    // 給所有對象類型增加一個 dep [] 
+    // 獲取數組的值，會調用 get 方法，希望讓當前數組渲染的 watcher
+        // 需要獲取到當前 dep
+        // 數組取值時，數組的 dep 記住這個 watcher
+        // 數組更新時， 找到這個 watcher 進行更新 
   </script>
 </body>
 </html>

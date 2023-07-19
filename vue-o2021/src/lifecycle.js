@@ -1,7 +1,16 @@
 import { patch } from "./vnode/patch";
+import Watcher from './observe/watcher'
 
 export function mountComponent(vm, el) {
-  vm._update(vm._render()); // 將 render 變成 vnode  然後掛載到頁面
+  callHook(vm, 'beforeMount')
+  // vm._update(vm._render()); // 將 render 變成 vnode  然後掛載到頁面
+  const updateComponent = () => {
+    vm._update(vm._render()); 
+  }
+  new Watcher(vm, updateComponent, () => {
+    callHook(vm, 'updated')
+  }, true);
+  callHook(vm, 'mounted')
 }
 
 export function lifecycleMixin(Vue) {
@@ -9,5 +18,15 @@ export function lifecycleMixin(Vue) {
     // console.log(vnode)
     const vm = this;
     vm.$el = patch(vm.$el, vnode);
+  }
+}
+
+// 生命周期調用
+export function callHook(vm, hook) {
+  const handlers = vm.$options[hook];
+  if(handlers) {
+    for (let i = 0; i < handlers.length; i++) {
+      handlers[i].call(this);
+    }
   }
 }

@@ -34,6 +34,7 @@ methods.forEach(item => {
       // 對添加的對象進行劫持
       ob.observeArray(inserted)
     }
+    ob.dep.notify();
     return result;
   }
 })

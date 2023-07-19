@@ -5,6 +5,6 @@ export function initGlobApi(Vue) {
   Vue.options = {};
   Vue.Mixin = function (mixin) { // mixin: {}
     // 對象的合併
-    Vue.options = mergeOptions(this.options, mixin)
+    this.options = mergeOptions(this.options, mixin)
   }
 }
