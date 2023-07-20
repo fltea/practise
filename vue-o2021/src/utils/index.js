@@ -15,8 +15,8 @@ starts.data = function (parentVal, childVal) {
   return childVal
 }
 starts.computed = function () {}
-starts.watch = function () {}
-starts.methods = function () {}
+// starts.watch = function () {}
+// starts.methods = function () {}
 
 // 遍曆生命周期
 HOOKS.forEach(hooks => {

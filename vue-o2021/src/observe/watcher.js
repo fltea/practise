@@ -3,21 +3,31 @@ import { popTarget, pushTarget } from "./dep";
 
 let id = 0;
 class Watcher {
-  constructor(vm, updateComponent, cb, options) {
+  constructor(vm, exprOrFn, cb, options) {
     this.vm = vm;
-    this.exprOrFn = updateComponent;
+    this.exprOrFn = exprOrFn;
     this.cb = cb;
     this.options = options;
+    this.user = !!options.user
     this.id = id++;
     this.deps = []
     this.depsId = new Set()
 
-    if(typeof updateComponent === 'function') {
-      this.getter = updateComponent;  // 用來更新視圖
+    if(typeof exprOrFn === 'function') {
+      this.getter = exprOrFn;  // 用來更新視圖
+    } else {
+      this.getter = function () { //屬性
+        let path = exprOrFn.split('.')
+        let obj  = vm
+        for (let i = 0; i < path.length; i++) {
+          obj  = obj[path[i]]
+        }
+        return obj;
+      }
     }
 
     // 更新視圖
-    this.get();
+    this.value = this.get();
   }
   addDep(dep) {
     let id = dep.id
@@ -28,16 +38,23 @@ class Watcher {
     }
   }
   // 初次渲染
-  get(){
+  get() {
     pushTarget(this)
-    this.getter()
+    const value = this.getter()
     popTarget()
+    return value;
   }
   run() {
-    this.getter();
+    let value = this.get();
+    let oldvalue = this.value
+    this.value = value
+    // 執行 handler
+    if(this.user) {
+      this.cb.call(this.vm, value, oldvalue)
+    }
   }
   // 更新
-  update(){
+  update() {
     // this.getter()
     queueWatcher(this)
   }
@@ -50,7 +67,9 @@ let pending = false
 function flushWatcher(){
   queue.forEach(item => {
     item.run();
-    item.cb();
+    if(!item.user) {
+      item.cb();
+    }
   })
   queue = []
   has = {}
@@ -58,7 +77,7 @@ function flushWatcher(){
 }
 
 function queueWatcher(watcher) {
-  console.log(watcher.id)
+  // console.log(watcher.id)
 
   if(!has[id]) {
     queue.push(watcher)

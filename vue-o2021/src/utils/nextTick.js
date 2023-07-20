@@ -26,7 +26,7 @@ if(Promise) {
 }
 
 export function nextTick(cb) {
-  console.log('cb',cb)
+  // console.log('cb',cb)
   callback.push(cb)
   if(!pending) {
     timerFunc();

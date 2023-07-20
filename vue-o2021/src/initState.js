@@ -1,4 +1,5 @@
 import { observer } from "./observe/index";
+import Watcher from "./observe/watcher";
 import { nextTick } from "./utils/nextTick";
 
 export function initState(vm) {
@@ -8,6 +9,9 @@ export function initState(vm) {
   if(ops.props) {
     initProps(vm)
   }
+  if(ops.methods) {
+    initMethods(vm)
+  }
   if(ops.data) {
     initData(vm)
   }
@@ -16,9 +20,6 @@ export function initState(vm) {
   }
   if(ops.watch) {
     initWatch(vm)
-  }
-  if(ops.methods) {
-    initMethods(vm)
   }
 }
 
@@ -54,11 +55,54 @@ function initData(vm){
 }
 
 function initComputed(vm){}
-function initWatch(vm){}
-function initMethods(vm){}
+function initWatch(vm){
+  let watch = vm.$options.watch;
+  // console.log(watch)
+  for (const key in watch) {
+    const handler = watch[key]
+    // 函數 對象 數組 字符串
+    // console.log(handler)
+    if(Array.isArray(handler)) {
+      handler.forEach(item => createWatcher(vm, key, item))
+    } else {
+      createWatcher(vm, key, handler)
+    }
+  }
+}
 
-export function stateMixin(vm) {
-  vm.prototype.$nextTick = function (cb) {
+// vm.$watch(() => {return 'a'}) 
+function createWatcher(vm, exprOrfn, handler, options){
+  if(typeof handler === 'object') {
+    options = handler
+    handler = handler.handler
+  }
+
+  if(typeof handler === 'string') {
+    handler = vm[handler] // 將實例上的方法作為 handler 
+  }
+
+  // 其他是函數
+  return vm.$watch(vm, exprOrfn, handler, options)
+}
+
+function initMethods(vm){
+  const methods = vm.$options.methods;
+  for (const key in methods) {
+    vm[key] = methods[key]
+  }
+}
+
+export function stateMixin(Vue) {
+  Vue.prototype.$nextTick = function (cb) {
     nextTick(cb)
+  }
+  Vue.prototype.$watch = function (vm, exprOrfn, handler, options = {}) {
+    // console.log(exprOrfn, handler, options)
+    // 實現 watch 就是  new Watcher 渲染走 渲染 Watcher  $watch 走 watcher user:false
+
+    let watcher = new Watcher(vm, exprOrfn, handler, {...options, user: true})
+    if(options.immediate) {
+      handler.call(vm) // 立即執行
+    }
   }
 }

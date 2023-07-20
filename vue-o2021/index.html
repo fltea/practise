@@ -47,7 +47,23 @@
         // console.log('created 343dfgfkgj lfgk 454545')
       },
       updated(){
-        console.log('updated 343dfgfkgj lfgk 454545')
+        // console.log('updated 343dfgfkgj lfgk 454545')
+      },
+      watch: {
+        // msg(nv,ov){
+        //   console.log(nv)
+        // }
+        'a.b': {
+          handler(v2,v3) {
+            console.log('flash handler', this, v2,v3 )
+          },
+          immediate: true,
+        }
+      },
+      methods: {
+        flash(){
+          console.log(this, 'flash')
+        }
       }
     })
 
@@ -65,12 +81,13 @@
     // 設計模式 訂閱發佈  vue options{data:[],watch:[]}
 
     setTimeout(() => {  // nextTick
-      vm.msg = '數據變化'
-      vm.list.push(34)
+      // vm.msg = '數據變化'
+      // vm.list.push(34)
+      vm.a.b = 333
     }, 1000);
-    vm.$nextTick(() => {
-      console.log('nextTick', vm.$el.innerHTML)
-    })
+    // vm.$nextTick(() => {
+    //   console.log('nextTick', vm.$el.innerHTML)
+    // })
     // 數據變化 vm._update(vm._render())
     //  vue 中更新組件策略是 以組件為單位，個每一個組件添加一個 watcher ，屬性變化後，調用者 watcher
 
