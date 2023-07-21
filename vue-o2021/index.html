@@ -6,8 +6,9 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="app" style="color: red;font-size: 20px">hello {{ msg }} <h1>kewq</h1>{{ list }} </div>
+  <!-- <div id="app" style="color: red;font-size: 20px">hello {{ msg }} <h1>kewq</h1>{{ list }} </div> -->
   <!-- <div id="app">hello {{ msg }} <h1>666 <span>34343</span></h1></div> -->
+  <!-- <div id="epp"></div> -->
   <script src="dist/vue.js"></script>
   <script>
     // umd Vue
@@ -29,43 +30,43 @@
     //     console.log('mixin created 3')
     //   }
     // })
-    const vm = new Vue({
-      el:'#app',
-      data() {
-        console.log(this)
-        return {
-          msg: 'dfdf',
-          msg1: 'dfdf',
-          a: {
-            b: 20,
-          },
-          list: [1,2,4],
-          newsl: [{a:2}]
-        }
-      },
-      created(){
-        // console.log('created 343dfgfkgj lfgk 454545')
-      },
-      updated(){
-        // console.log('updated 343dfgfkgj lfgk 454545')
-      },
-      watch: {
-        // msg(nv,ov){
-        //   console.log(nv)
-        // }
-        'a.b': {
-          handler(v2,v3) {
-            console.log('flash handler', this, v2,v3 )
-          },
-          immediate: true,
-        }
-      },
-      methods: {
-        flash(){
-          console.log(this, 'flash')
-        }
-      }
-    })
+    // const vm = new Vue({
+    //   el:'#app',
+    //   data() {
+    //     console.log(this)
+    //     return {
+    //       msg: 'dfdf',
+    //       msg1: 'dfdf',
+    //       a: {
+    //         b: 20,
+    //       },
+    //       list: [1,2,4],
+    //       newsl: [{a:2}]
+    //     }
+    //   },
+    //   created(){
+    //     // console.log('created 343dfgfkgj lfgk 454545')
+    //   },
+    //   updated(){
+    //     // console.log('updated 343dfgfkgj lfgk 454545')
+    //   },
+    //   watch: {
+    //     // msg(nv,ov){
+    //     //   console.log(nv)
+    //     // }
+    //     'a.b': {
+    //       handler(v2,v3) {
+    //         console.log('flash handler', this, v2,v3 )
+    //       },
+    //       immediate: true,
+    //     }
+    //   },
+    //   methods: {
+    //     flash(){
+    //       console.log(this, 'flash')
+    //     }
+    //   }
+    // })
 
     // console.log(vm._data.a = {c:30})
     // console.log(vm._data.list.push(100))
@@ -80,11 +81,11 @@
     // Vue.mixin({  })  混入
     // 設計模式 訂閱發佈  vue options{data:[],watch:[]}
 
-    setTimeout(() => {  // nextTick
-      // vm.msg = '數據變化'
-      // vm.list.push(34)
-      vm.a.b = 333
-    }, 1000);
+    // setTimeout(() => {  // nextTick
+    //   // vm.msg = '數據變化'
+    //   // vm.list.push(34)
+    //   vm.a.b = 333
+    // }, 1000);
     // vm.$nextTick(() => {
     //   console.log('nextTick', vm.$el.innerHTML)
     // })
@@ -100,6 +101,17 @@
         // 需要獲取到當前 dep
         // 數組取值時，數組的 dep 記住這個 watcher
         // 數組更新時， 找到這個 watcher 進行更新 
+
+    //  vue 操作 vnode {tag:'div', data:{}}
+    // 真實 DOM 屬性
+    //   console.log(epp)
+    // for(let kye in epp) {
+    //   console.log(kye)
+    // }
+
+    // vue diff 算法 最小量更新 （比對） old new
+    // 創建倆個 vnode
+    // 比對： 在數據更新的時候， 拿到老的節點和新的節點作對比 將不同的地方進行更新
   </script>
 </body>
 </html>

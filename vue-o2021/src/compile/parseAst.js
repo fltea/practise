@@ -21,57 +21,57 @@ const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // {{ xxx }}
 
 // 遍歷
 
-// 創建 Ast 對象
-function createASTElement(tag, attrs) {
-  return {
-    tag,
-    attrs,
-    children: [],
-    type: 1,
-    parent: null,
+export function parseHTML(html) {
+  // 創建 Ast 對象
+  function createASTElement(tag, attrs) {
+    return {
+      tag,
+      attrs,
+      children: [],
+      type: 1,
+      parent: null,
+    }
   }
-}
 
-// 是否根元素
-let root 
-// 當前元素的母類
-let createParent
-// 數據結構 棧
-let stack = []
+  // 是否根元素
+  let root 
+  // 當前元素的母類
+  let createParent
+  // 數據結構 棧
+  let stack = []
 
-// 開始標簽
-function start(tag, attrs) {
-  // console.log(tag, attrs, '開始標簽')
-  const element = createASTElement(tag, attrs);
-  if(!root) {
-    root = element
+  // 開始標簽
+  function start(tag, attrs) {
+    // console.log(tag, attrs, '開始標簽')
+    const element = createASTElement(tag, attrs);
+    if(!root) {
+      root = element
+    }
+    createParent = element
+    stack.push(element)
   }
-  createParent = element
-  stack.push(element)
-}
-// 文本
-function charts(text) {
-  // console.log(text, '文本')
-  text = text.replace(/\s/g,'');
-  if(text) {
-    createParent.children.push({
-      type: 3,
-      text,
-    })
+  // 文本
+  function charts(text) {
+    // console.log(text, '文本')
+    text = text.replace(/\s/g,'');
+    if(text) {
+      createParent.children.push({
+        type: 3,
+        text,
+      })
+    }
   }
-}
-// 結束標籤
-function end(tag) {
-  // console.log(tag, '結束標籤')
-  const element = stack.pop();
-  createParent = stack[stack.length - 1];
-  if(createParent) {
-    element.parent = createParent.tag;
-    createParent.children.push(element);
+  // 結束標籤
+  function end(tag) {
+    // console.log(tag, '結束標籤')
+    const element = stack.pop();
+    createParent = stack[stack.length - 1];
+    if(createParent) {
+      element.parent = createParent.tag;
+      createParent.children.push(element);
+    }
   }
-}
 
-export function parseHTML(html){
   while(html) {
     // 判斷標簽 <>
     let textEnd = html.indexOf('<')
