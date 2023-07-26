@@ -39,7 +39,8 @@
       // start(context, 200, 800, 300, 'round')
       // start(context, 200, 500, 700, 'bevel')
       // rect(context, 100, 100, 300, 300)
-      gradient(context)
+      // arcs(context)
+      arcRects(context, 100, 100, 600, 600, 30)
     }
 
     function line(ctx) {
@@ -249,6 +250,69 @@
         ctx.fillStyle = pattern
         ctx.fillRect(0, 0 , WIDTH, HEIGHT)
       }
+    }
+    
+    function arcs(ctx) {
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath()
+        ctx.arc(50 + i*100 , 60, 40, 0 , 2*Math.PI* (i+1)/10)
+        ctx.stroke()
+      }
+
+      
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath()
+        ctx.arc(50 + i*100 , 180, 40, 0 , 2*Math.PI* (i+1)/10)
+        ctx.closePath()
+        ctx.stroke()
+      }
+
+      
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath()
+        ctx.arc(50 + i*100 , 300, 40, 0 , 2*Math.PI* (i+1)/10, true)
+        ctx.closePath()
+        ctx.stroke()
+      }
+
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath()
+        ctx.arc(50 + i*100 , 420, 40, 0 , 2*Math.PI* (i+1)/10, true)
+        ctx.stroke()
+      }
+
+      context.fillStyle = '#058'
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath()
+        ctx.arc(50 + i*100 , 540, 40, 0 , 2*Math.PI* (i+1)/10)
+        ctx.fill()
+      }
+
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath()
+        ctx.arc(50 + i*100 , 660, 40, 0 , 2*Math.PI* (i+1)/10, true)
+        ctx.fill()
+      }
+    }
+
+    function arcRects(ctx, x, y, w, h, r) {
+      ctx.save();
+      ctx.translate(x,y)
+      PathRoundRect(ctx, w, h, r);
+      ctx.stroke()
+      ctx.restore();
+    }
+
+    function PathRoundRect(ctx, w, h, r) {
+      ctx.beginPath()
+      ctx.arc(w-r, h-r, r, 0 , Math.PI / 2)
+      ctx.lineTo(r, h)
+      ctx.arc(r, h-r, r, Math.PI / 2, Math.PI)
+      ctx.lineTo(0, r)
+      ctx.arc(r, r, r, Math.PI , Math.PI * 3 / 2)
+      ctx.lineTo(w-r, 0)
+      ctx.arc(w-r, r, r, Math.PI * 3 / 2 , Math.PI * 2)
+      ctx.closePath()
     }
   </script>
 </body>
