@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CANVAS API</title>
+  <style>
+    body{
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="app">
+    不支持 Canvas
+  </canvas>
+  <script>
+    const canvas = document.querySelector('#app')
+
+    const context = canvas.getContext('2d');
+    let WIDTH, HEIGHT
+
+    window.onload = () => {
+      WIDTH = document.body.clientWidth;
+      HEIGHT = document.body.clientHeight;
+      console.log('onload')
+
+      canvas.width = WIDTH
+      canvas.height = HEIGHT
+
+      line(context)
+    }
+
+    function line(ctx) {
+      ctx.lineWidth = 10
+
+      ctx.beginPath();
+      ctx.moveTo(100, 200);
+      ctx.lineTo(300, 400);
+      ctx.lineTo(100, 600);
+      ctx.strokeStyle = '#f00'
+      ctx.stroke();
+
+      // beginPath + lineTo === moveTo
+      ctx.beginPath();
+      ctx.lineTo(300, 200);
+      ctx.lineTo(500, 400);
+      ctx.lineTo(300, 600);
+      ctx.strokeStyle = '#0f0'
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(500, 200);
+      ctx.lineTo(700, 400);
+      ctx.lineTo(500, 600);
+
+      ctx.strokeStyle = '#058'
+      ctx.stroke();
+    }
+
+  </script>
+</body>
+</html>
