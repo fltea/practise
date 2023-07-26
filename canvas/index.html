@@ -18,6 +18,7 @@
     不支持 Canvas
   </canvas>
   <script>
+    // canvas 基於狀態繪圖
     const canvas = document.querySelector('#app')
 
     const context = canvas.getContext('2d');
@@ -31,7 +32,8 @@
       canvas.width = WIDTH
       canvas.height = HEIGHT
 
-      line(context)
+      // line(context)
+      rect(context, 100, 100, 300, 300)
     }
 
     function line(ctx) {
@@ -61,6 +63,44 @@
       ctx.stroke();
     }
 
+    function arrow(ctx) {
+      ctx.lineWidth = 10
+
+      ctx.beginPath();
+      ctx.moveTo(100, 350);
+      ctx.lineTo(500, 350);
+      ctx.lineTo(500, 200);
+      ctx.lineTo(700, 400);
+      ctx.lineTo(500, 600);
+      ctx.lineTo(500, 450);
+      ctx.lineTo(100, 450);
+      // ctx.lineTo(100, 350);
+      // 封閉多邊形
+      ctx.closePath()
+
+      ctx.fillStyle = '#f00'
+      // 需要先填充後描邊
+      ctx.fill();
+
+      ctx.strokeStyle = '#058'
+      ctx.stroke()
+      // ctx.fill();
+    }
+
+    function rect(ctx, x, y, width, height) {
+      ctx.fillStyle = '#f00'
+      ctx.strokeStyle = '#058'
+      
+      ctx.strokeRect(x + 200, y + 200, width, height)
+      ctx.fillRect(x + 100, y + 100, width, height)
+
+      ctx.beginPath()
+      // 透明色
+      ctx.fillStyle = 'rgba(0,0,0,0.4)'
+      ctx.rect(x, y, width, height)
+      ctx.fill()
+      ctx.stroke()
+    }
   </script>
 </body>
 </html>
