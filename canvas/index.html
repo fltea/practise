@@ -39,7 +39,7 @@
       // start(context, 200, 800, 300, 'round')
       // start(context, 200, 500, 700, 'bevel')
       // rect(context, 100, 100, 300, 300)
-      transform(context)
+      gradient(context)
     }
 
     function line(ctx) {
@@ -222,6 +222,34 @@
 
     } 
 
+    function gradient(ctx) { 
+      // const linearGrad = ctx.createLinearGradient(0,0,400,400)
+      // linearGrad.addColorStop(0, 'white')
+      // linearGrad.addColorStop(0.25, 'yellow')
+      // linearGrad.addColorStop(0.5, 'red')
+      // linearGrad.addColorStop(0.75, 'blue')
+      // linearGrad.addColorStop(1, 'black')
+      // ctx.fillStyle = linearGrad
+      // ctx.fillRect(0 , 0, WIDTH/2, HEIGHT/2)
+
+      // ctx.beginPath()
+      // const redialGrad = ctx.createRadialGradient(WIDTH * 3/4,HEIGHT * 3/4,0,WIDTH * 3/4,HEIGHT * 3/4, 300)
+      // redialGrad.addColorStop(0, 'white')
+      // redialGrad.addColorStop(0.25, 'yellow')
+      // redialGrad.addColorStop(0.5, 'red')
+      // redialGrad.addColorStop(0.75, 'blue')
+      // redialGrad.addColorStop(1, 'black')
+      // ctx.fillStyle = redialGrad
+      // ctx.fillRect(WIDTH/2, HEIGHT/2, WIDTH, HEIGHT)
+
+      const bgimg = new Image();
+      bgimg.src = './imgs.png'
+      bgimg.onload = () => {
+        const pattern = ctx.createPattern(bgimg, 'repeat')
+        ctx.fillStyle = pattern
+        ctx.fillRect(0, 0 , WIDTH, HEIGHT)
+      }
+    }
   </script>
 </body>
 </html>
