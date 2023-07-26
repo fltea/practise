@@ -35,7 +35,9 @@
       context.lineWidth = 10
       context.strokeStyle = '#058'
 
-      lineCap(context)
+      start(context, 200, 300, 300)
+      start(context, 200, 800, 300, 'round')
+      start(context, 200, 500, 700, 'bevel')
       // rect(context, 100, 100, 300, 300)
     }
 
@@ -134,6 +136,27 @@
       ctx.lineWidth = 1
       ctx.strokeStyle = '#27a'
       ctx.stroke()
+    }
+
+    function start(ctx, R, x, y, lineJoin) {
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        // 五邊形
+        ctx.lineTo(Math.cos((18 + i * 72)/180 * Math.PI) * R + x,
+                  -Math.sin((18 + i * 72)/180 * Math.PI) * R + y)
+        // 五角星
+        ctx.lineTo(Math.cos((54 + i * 72)/180 * Math.PI) * R / 2 + x,
+                  -Math.sin((54 + i * 72)/180 * Math.PI) * R / 2 + y)
+      }
+      ctx.closePath();
+      // ctx.fillStyle = '#fb3'
+      ctx.strokeStyle = '#fd5'
+      ctx.lineWidth = 20
+      ctx.lineJoin = lineJoin || 'miter'
+      ctx.miterLimit = 20
+      // ctx.fill();
+      ctx.stroke();
+
     }
   </script>
 </body>
