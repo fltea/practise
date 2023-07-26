@@ -35,10 +35,11 @@
       context.lineWidth = 10
       context.strokeStyle = '#058'
 
-      start(context, 200, 300, 300)
-      start(context, 200, 800, 300, 'round')
-      start(context, 200, 500, 700, 'bevel')
+      // start(context, 200, 300, 300)
+      // start(context, 200, 800, 300, 'round')
+      // start(context, 200, 500, 700, 'bevel')
       // rect(context, 100, 100, 300, 300)
+      transform(context)
     }
 
     function line(ctx) {
@@ -158,6 +159,69 @@
       ctx.stroke();
 
     }
+
+    function transform(ctx) {
+      // translate 會疊加
+
+      // 保存當前的圖形狀態
+      // ctx.save()
+      // ctx.fillStyle = 'red'
+      // ctx.translate(200, 200)
+      // ctx.fillRect(0,0,400,400)
+      // ctx.restore()
+      // restore 和 save 應該成對出現 返回 save 節點的狀態 
+
+      // ctx.save()
+      // ctx.fillStyle = 'green'
+      // ctx.translate(300, 300)
+      // ctx.fillRect(0,0,400,400)
+      // ctx.restore()
+
+      context.lineWidth = 5
+
+      ctx.save()
+      // scale 會縮放所有狀態，包括 坐標 線條寬度 寬高
+      ctx.scale(1, 1)
+      ctx.strokeRect(50, 50, 200, 200)
+      ctx.restore()
+
+      ctx.save()
+      ctx.scale(2, 2)
+      ctx.strokeRect(50, 50, 200, 200)
+      ctx.restore()
+
+      ctx.save()
+      ctx.scale(3, 3)
+      ctx.strokeRect(50, 50, 200, 200)
+      ctx.restore()
+
+      // ctx.rotate(-20 / 180 * Math.PI)
+      // ctx.save()
+      // ctx.fillRect(100, 600, 100, 100)
+      // ctx.restore()
+      /**
+       *  a c e 
+       *  b d f 
+       *  0 0 1
+       * 
+       * a d 水平垂直縮放
+       * b c 水平垂直傾斜
+       * e f 水平垂直位移
+       * 
+       * */
+      // ctx.transform(a, b, c, d, e, f)
+      ctx.fillStyle = 'blue'
+      // ctx.transform(2, 0, 0, 1.5, 50, 50)
+      ctx.transform(2, -0.2, 0.8, 1, 0, 0);
+
+      ctx.setTransform(1,0,0,1,100,100)
+      ctx.fillRect(100, 600, 100, 100)
+      ctx.strokeRect(100, 600, 100, 100)
+      // ctx.fillRect(0, 0, 100, 100);
+
+
+    } 
+
   </script>
 </body>
 </html>
