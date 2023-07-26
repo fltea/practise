@@ -32,8 +32,11 @@
       canvas.width = WIDTH
       canvas.height = HEIGHT
 
-      // line(context)
-      rect(context, 100, 100, 300, 300)
+      context.lineWidth = 10
+      context.strokeStyle = '#058'
+
+      lineCap(context)
+      // rect(context, 100, 100, 300, 300)
     }
 
     function line(ctx) {
@@ -99,6 +102,37 @@
       ctx.fillStyle = 'rgba(0,0,0,0.4)'
       ctx.rect(x, y, width, height)
       ctx.fill()
+      ctx.stroke()
+    }
+
+    function lineCap(ctx){
+      ctx.lineWidth = 50
+      ctx.beginPath();
+      ctx.moveTo(100, 200);
+      ctx.lineTo(700, 200);
+      ctx.lineCap = 'butt';
+      ctx.stroke()
+
+      ctx.beginPath();
+      ctx.moveTo(100, 400);
+      ctx.lineTo(700, 400);
+      ctx.lineCap = 'round';
+      ctx.stroke()
+
+      ctx.beginPath();
+      ctx.moveTo(100, 600);
+      ctx.lineTo(700, 600);
+      ctx.lineCap = 'square';
+      ctx.stroke()
+
+      // baseline
+      ctx.beginPath();
+      ctx.moveTo(100, 100);
+      ctx.lineTo(100, 700);
+      ctx.moveTo(700, 100);
+      ctx.lineTo(700, 700);
+      ctx.lineWidth = 1
+      ctx.strokeStyle = '#27a'
       ctx.stroke()
     }
   </script>
