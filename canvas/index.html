@@ -40,7 +40,10 @@
       // start(context, 200, 500, 700, 'bevel')
       // rect(context, 100, 100, 300, 300)
       // arcs(context)
-      arcRects(context, 100, 100, 600, 600, 30)
+      // arcto(context, 150, 100, 650, 100, 650, 600, 500)
+      // arcto(context, 150, 100, 650, 100, 650, 600, 600)
+      arcto(context, 150, 100, 650, 100, 650, 600, 200)
+      // arcRects(context, 100, 100, 600, 600, 30)
     }
 
     function line(ctx) {
@@ -313,6 +316,25 @@
       ctx.lineTo(w-r, 0)
       ctx.arc(w-r, r, r, Math.PI * 3 / 2 , Math.PI * 2)
       ctx.closePath()
+    }
+
+    function arcto(ctx, x0, y0, x1, y1, x2, y2, R) {
+      ctx.beginPath()
+      ctx.moveTo(x0, y0);
+      ctx.arcTo(x1, y1, x2, y2, R)
+
+      ctx.lineWidth = 6
+      ctx.strokeStyle = 'red'
+      ctx.stroke()
+
+      ctx.beginPath()
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x1, y1);
+      ctx.lineTo(x2, y2);
+
+      ctx.lineWidth = 2
+      ctx.strokeStyle = 'gray'
+      ctx.stroke()
     }
   </script>
 </body>
