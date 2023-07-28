@@ -42,8 +42,10 @@
       // arcs(context)
       // arcto(context, 150, 100, 650, 100, 650, 600, 500)
       // arcto(context, 150, 100, 650, 100, 650, 600, 600)
-      arcto(context, 150, 100, 650, 100, 650, 600, 200)
+      // arcto(context, 150, 100, 650, 100, 650, 600, 200)
       // arcRects(context, 100, 100, 600, 600, 30)
+
+      fillMoon(context, 2, 400, 400, 300, 0)
     }
 
     function line(ctx) {
@@ -336,6 +338,27 @@
       ctx.strokeStyle = 'gray'
       ctx.stroke()
     }
+
+    function fillMoon(ctx, d, x, y, R, rot, fillColor) {
+      ctx.save()
+      ctx.translate(x,y)
+      ctx.rotate(rot * Math.PI / 180)
+      ctx.scale(R, R)
+      pathMoon(ctx, d)
+      ctx.fillStyle = fillColor || '#fb5'
+      ctx.fill()
+      ctx.restore()
+    }
+
+    function pathMoon(ctx, d) {
+      ctx.beginPath()
+      ctx.arc(0, 0, 1, 0.5 * Math.PI, 1.5 * Math.PI, true)
+      ctx.moveTo(0, -1)
+      ctx.quadraticCurveTo(1.2, 0, 0, 1)
+      ctx.closePath();
+    }
+
+
   </script>
 </body>
 </html>
