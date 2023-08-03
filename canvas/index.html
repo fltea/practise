@@ -45,7 +45,9 @@
       // arcto(context, 150, 100, 650, 100, 650, 600, 200)
       // arcRects(context, 100, 100, 600, 600, 30)
 
-      fillMoon(context, 2, 400, 400, 300, 0)
+      // fillMoon(context, 2, 400, 400, 300, 0)
+
+      textAlign(context, 'feat: quadraticCurveTo')
     }
 
     function line(ctx) {
@@ -251,6 +253,7 @@
       const bgimg = new Image();
       bgimg.src = './imgs.png'
       bgimg.onload = () => {
+        // createPattern cavas img video 
         const pattern = ctx.createPattern(bgimg, 'repeat')
         ctx.fillStyle = pattern
         ctx.fillRect(0, 0 , WIDTH, HEIGHT)
@@ -359,7 +362,55 @@
       ctx.closePath();
     }
 
-    
+    // 文字
+    function textFont(ctx, text) {
+      context.lineWidth = 2
+      ctx.font = '40px bold Arial'
+      ctx.fillStyle = '#058'
+      ctx.fillText(text, 40, 50)
+      ctx.fillText(text, 40, 100, 200)
+
+      ctx.strokeText(text, 40, 150)
+      ctx.strokeText(text, 40, 200, 200)
+
+
+      ctx.beginPath()
+      const bgimg = new Image();
+      bgimg.src = './ethical.jpg'
+      bgimg.onload = () => {
+        // createPattern cavas img video 
+        const pattern = ctx.createPattern(bgimg, 'repeat')
+        ctx.fillStyle = pattern
+        ctx.font = '80px bold Arial'
+        ctx.fillText(text, 40, 300)
+        ctx.strokeText(text, 40, 300)
+      }
+
+      ctx.beginPath()
+      ctx.font = 'small-caps bold 40px Arial'
+      ctx.fillText(text, 40, 400)
+      ctx.beginPath()
+      ctx.font = 'small-caps lighter 40px Arial'
+      ctx.fillText(text, 40, 500)
+    }
+
+    function textAlign(ctx, text) {
+      ctx.font = '40px bold Arial'
+      ctx.fillStyle = '#058'
+      ctx.textAlign = 'left'
+      ctx.fillText(text + ' left', 600, 50)
+      ctx.beginPath()
+      ctx.textAlign = 'center'
+      ctx.fillText(text + ' center', 600, 150)
+      ctx.beginPath()
+      ctx.textAlign = 'right'
+      ctx.fillText(text + ' right', 600, 250)
+      ctx.beginPath()
+      ctx.lineWidth = 2
+      ctx.moveTo(600, 0)
+      ctx.lineTo(600, 300)
+      ctx.stroke()
+    }
   </script>
 </body>
 </html>
