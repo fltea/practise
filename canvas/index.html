@@ -47,7 +47,9 @@
 
       // fillMoon(context, 2, 400, 400, 300, 0)
 
-      textAlign(context, 'feat: quadraticCurveTo')
+      // 你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌
+      textWidth(context, 'feat: quadraticCurveTo')
+      textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
     }
 
     function line(ctx) {
@@ -423,6 +425,19 @@
       ctx.lineTo(WIDTH, 250)
       ctx.stroke()
     }
+
+    let y = 100
+    function textWidth(ctx, text) {
+      ctx.font = '40px bold Arial'
+      ctx.fillStyle = '#058'
+      ctx.fillText(text, 40, y)
+      y += 100;
+      
+      const twidth = ctx.measureText(text).width
+      ctx.fillText(`以上字符串的寬度為${twidth}px`, 40, y)
+      y += 100;
+    }
+
   </script>
 </body>
 </html>
