@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-  <div id="btnd">
+  <!-- <div id="btnd">
     <a href="#">source-over</a>
     <a href="#">source-atop</a>
     <a href="#">source-in</a>
@@ -37,7 +37,7 @@
     <a href="#">lighter</a>
     <a href="#">copy</a>
     <a href="#">xor</a>
-  </div>
+  </div> -->
   <canvas id="app">
     不支持 Canvas
   </canvas>
@@ -85,8 +85,8 @@
 
       // textWidth(context, 'feat: quadraticCurveTo')
       // textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
-      // global(context)
-      initEvent(context)
+      clip(context)
+      // initEvent(context)
     }
 
     function line(ctx) {
@@ -520,6 +520,25 @@
       ctx.lineTo(400, 750)
       ctx.closePath()
       ctx.fill()
+
+    }
+
+    function clip (ctx) {
+      ctx.beginPath()
+      ctx.fillStyle = 'black'
+      ctx.fillRect(0,0, WIDTH, HEIGHT)
+
+      ctx.beginPath()
+      ctx.arc(WIDTH / 2, HEIGHT /2, 150, 0, Math.PI * 2)
+      ctx.fillStyle = 'white'
+      ctx.fill();
+      ctx.clip()
+
+      ctx.font = '150px bold Arial'
+      ctx.fillStyle = '#058'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`CANVAS`, WIDTH /2 , HEIGHT /2)
 
     }
 
