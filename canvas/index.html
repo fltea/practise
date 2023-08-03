@@ -85,7 +85,7 @@
 
       // textWidth(context, 'feat: quadraticCurveTo')
       // textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
-      clip(context)
+      clipPath(context)
       // initEvent(context)
     }
 
@@ -539,6 +539,21 @@
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       ctx.fillText(`CANVAS`, WIDTH /2 , HEIGHT /2)
+
+    }
+
+    function clipPath(ctx) {
+      ctx.beginPath()
+      ctx.arc(WIDTH / 2, HEIGHT /2, 300, 0, Math.PI * 2, false)
+      ctx.arc(WIDTH / 2, HEIGHT /2, 150, 0, Math.PI * 2, true)
+      ctx.closePath()
+
+      ctx.fillStyle = '#058'
+      ctx.shadowColor = 'gray'
+      ctx.shadowOffsetX = 10
+      ctx.shadowOffsetY = 10
+      ctx.shadowBlur = 10
+      ctx.fill();
 
     }
 
