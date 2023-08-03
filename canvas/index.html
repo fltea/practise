@@ -397,18 +397,30 @@
     function textAlign(ctx, text) {
       ctx.font = '40px bold Arial'
       ctx.fillStyle = '#058'
+      ctx.strokeStyle = 'gray'
+      ctx.lineWidth = 2
       ctx.textAlign = 'left'
+      ctx.textBaseline = 'top'
       ctx.fillText(text + ' left', 600, 50)
+      ctx.moveTo(0, 50)
+      ctx.lineTo(WIDTH, 50)
+      ctx.stroke()
       ctx.beginPath()
       ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
       ctx.fillText(text + ' center', 600, 150)
+      ctx.moveTo(0, 150)
+      ctx.lineTo(WIDTH, 150)
+      ctx.stroke()
       ctx.beginPath()
       ctx.textAlign = 'right'
+      ctx.textBaseline = 'bottom'
       ctx.fillText(text + ' right', 600, 250)
       ctx.beginPath()
-      ctx.lineWidth = 2
       ctx.moveTo(600, 0)
-      ctx.lineTo(600, 300)
+      ctx.lineTo(600, HEIGHT)
+      ctx.moveTo(0, 250)
+      ctx.lineTo(WIDTH, 250)
       ctx.stroke()
     }
   </script>
