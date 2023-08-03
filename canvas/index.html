@@ -11,9 +11,33 @@
       margin: 0;
       overflow: hidden;
     }
+    #btnd {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 40px;
+    }
+    #btnd a { 
+      margin-left: 16px;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
+  <div id="btnd">
+    <a href="#">source-over</a>
+    <a href="#">source-atop</a>
+    <a href="#">source-in</a>
+    <a href="#">source-out</a>
+    <a href="#">destination-over</a>
+    <a href="#">destination-atop</a>
+    <a href="#">destination-in</a>
+    <a href="#">destination-out</a>
+    <a href="#">lighter</a>
+    <a href="#">copy</a>
+    <a href="#">xor</a>
+  </div>
   <canvas id="app">
     不支持 Canvas
   </canvas>
@@ -23,6 +47,17 @@
 
     const context = canvas.getContext('2d');
     let WIDTH, HEIGHT
+
+    function initEvent(ctx) {
+      const list = document.querySelector('#btnd').childNodes;
+      list.forEach(item => {
+        item.onclick = () => {
+          // console.log(item.innerText)
+          operation(ctx, item.innerText)
+        } 
+      })
+      operation(ctx, 'source-over')
+    }
 
     window.onload = () => {
       WIDTH = document.body.clientWidth;
@@ -34,6 +69,7 @@
 
       context.lineWidth = 10
       context.strokeStyle = '#058'
+      context.fillStyle = '#058'
 
       // start(context, 200, 300, 300)
       // start(context, 200, 800, 300, 'round')
@@ -47,9 +83,10 @@
 
       // fillMoon(context, 2, 400, 400, 300, 0)
 
-      // 你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌
-      textWidth(context, 'feat: quadraticCurveTo')
-      textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
+      // textWidth(context, 'feat: quadraticCurveTo')
+      // textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
+      // global(context)
+      initEvent(context)
     }
 
     function line(ctx) {
@@ -429,13 +466,61 @@
     let y = 100
     function textWidth(ctx, text) {
       ctx.font = '40px bold Arial'
-      ctx.fillStyle = '#058'
       ctx.fillText(text, 40, y)
       y += 100;
-      
+
       const twidth = ctx.measureText(text).width
       ctx.fillText(`以上字符串的寬度為${twidth}px`, 40, y)
       y += 100;
+    }
+
+    function shadow(ctx) {
+      ctx.shadowColor = 'gray'
+      ctx.shadowOffsetX = 20
+      ctx.shadowOffsetY = 20
+      ctx.shadowBlur = 5
+
+      // ctx.fillRect(200, 200, 400, 400)
+      textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
+    }
+    function global(ctx) {
+      // ctx.globalAlpha = 0.7;
+      ctx.globalCompositeOperation = "source-over"
+      arcs(ctx)
+    }
+
+    function arcs(ctx) {
+      for (let i = 0; i < 100; i++) {
+        const R = Math.floor(Math.random() * 255)
+        const G = Math.floor(Math.random() * 255)
+        const B = Math.floor(Math.random() * 255)
+        ctx.fillStyle = `rgb(${R},${G},${B})`;
+
+        ctx.beginPath();
+        ctx.arc(Math.random() * WIDTH, Math.random() * HEIGHT, Math.random() * 100, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+
+    function operation(ctx, style) {
+      ctx.clearRect(0,0,WIDTH,HEIGHT);
+      ctx.font = '40px bold Arial'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(`globalCompositeOperation 為: ${style}`, WIDTH / 2, y)
+
+      ctx.fillStyle = 'blue'
+      ctx.fillRect(300, 150, 500, 500);
+
+      ctx.globalCompositeOperation = style
+      ctx.fillStyle = 'red'
+      ctx.beginPath()
+      ctx.moveTo(700, 250)
+      ctx.lineTo(1000, 750)
+      ctx.lineTo(400, 750)
+      ctx.closePath()
+      ctx.fill()
+
     }
 
   </script>
