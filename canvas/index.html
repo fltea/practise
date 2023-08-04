@@ -85,8 +85,9 @@
 
       // textWidth(context, 'feat: quadraticCurveTo')
       // textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
-      clipPath(context)
+      pointer(context)
       // initEvent(context)
+      canvas.addEventListener('mouseup', detect)
     }
 
     function line(ctx) {
@@ -555,6 +556,50 @@
       ctx.shadowBlur = 10
       ctx.fill();
 
+    }
+
+    const balls = []
+    function getBalls() {
+      for (let i = 0; i < 10; i++) {
+        balls.push({
+          x: Math.random() * WIDTH,
+          y: Math.random() * HEIGHT,
+          r: Math.random() * 50 + 20
+        })
+      }
+    }
+
+    function pointer(ctx) {
+      //  isPointinPath(x,y)
+      // const balls = getBalls();
+      getBalls()
+      console.log(balls)
+      for (let i= 0; i < balls.length; i++) {
+        const ball = balls[i];
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+
+    function detect(event) {
+      const x = event.clientX - canvas.getBoundingClientRect().left;
+      const y = event.clientY - canvas.getBoundingClientRect().top;
+
+      // console.log('detect', x,y)
+      context.clearRect(0,0,WIDTH, HEIGHT)
+      for (let i= 0; i < balls.length; i++) {
+        const ball = balls[i];
+        context.beginPath();
+        context.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2)
+
+        if(context.isPointInPath(x, y)) {
+          context.fillStyle = 'red'
+        } else {
+          context.fillStyle = '#058'
+        }
+        context.fill()
+      }
     }
 
   </script>
