@@ -85,9 +85,9 @@
 
       // textWidth(context, 'feat: quadraticCurveTo')
       // textWidth(context, '你不知道的绘画入门秘诀！从零开始学画画，短时间快速掌')
-      pointer(context)
+      extend(context)
       // initEvent(context)
-      canvas.addEventListener('mouseup', detect)
+      // canvas.addEventListener('mouseup', detect)
     }
 
     function line(ctx) {
@@ -602,6 +602,41 @@
       }
     }
 
+    // context 擴展
+    CanvasRenderingContext2D.prototype.customerfn = function (r, R) {
+      this.beginPath();
+      for (let i = 0; i < 5; i++) {
+        this.lineTo(Math.cos((18 + i * 72)/180 * Math.PI) * R + this.lastMoveToLoc.x,
+                  -Math.sin((18 + i * 72)/180 * Math.PI) * R + this.lastMoveToLoc.y)
+        this.lineTo(Math.cos((54 + i * 72)/180 * Math.PI) * r + this.lastMoveToLoc.x,
+                  -Math.sin((54 + i * 72)/180 * Math.PI) * r + this.lastMoveToLoc.y)
+      }
+      this.closePath();
+      this.fill();
+    }
+
+    // 複寫
+    const originalMoveTo = CanvasRenderingContext2D.prototype.moveTo;
+    CanvasRenderingContext2D.prototype.lastMoveToLoc = {}
+
+    CanvasRenderingContext2D.prototype.moveTo = function (x, y){
+      originalMoveTo.apply(context, [x, y])
+      this.lastMoveToLoc.x = x;
+      this.lastMoveToLoc.y = y;
+    }
+
+    function extend(ctx){
+      ctx.moveTo(WIDTH / 2, HEIGHT / 2);
+      ctx.customerfn(150, 300)
+    }
+
+    // 兼容性變好
+    /**
+     * 圖形庫： 
+     *  1. canvasplus
+     *  2. Artisan JS
+     *  3. RGraph
+     * /
   </script>
 </body>
 </html>
