@@ -34,7 +34,7 @@ export function patch(oldVnode, vnode) {
     }
   }
 
-  const el = vnode.el  = oldVnode.el 
+  const el = vnode.el = oldVnode.el 
   updateProps(vnode, oldVnode.data)
   // childern diff
   let oldChildren = oldVnode.children || []
@@ -51,8 +51,107 @@ export function patch(oldVnode, vnode) {
   }
 }
 
-function updateChild(oldChildren, newChildren, el) {
-  // 
+function isSomeVnode(oldChild, newChild) {
+  return (oldChild.tag === newChild.tag) && (oldChild.key === newChild.key)
+}
+
+function makeIndexByKey(child){
+  let map = {}
+  child.forEach((item, index) => {
+    if(item.key) {
+      map[item.key] = index
+    }
+  })
+  return map
+}
+
+function updateChild(oldChildren, newChildren, parent) {
+  // vue diff 算法 做了很多優化
+  // dom 中操作元素 常用的邏輯 尾部添加 頭部添加 倒序和正序的方法
+  // vue 2 採用雙指針  
+  //  1. 創建雙指針
+  let oldStartIndex = 0
+  let oldStartVnode = oldChildren[oldStartIndex]
+  let oldEndIndex = oldChildren.length -1
+  let oldEndVnode = oldChildren[oldEndIndex]
+  
+  let newStartIndex = 0
+  let newStartVnode = newChildren[newStartIndex]
+  let newEndIndex = newChildren.length -1
+  let newEndVnode = newChildren[newEndIndex]
+
+  let map = makeIndexByKey(oldChildren)
+
+  while(oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+    // 比對子元素
+    // 是不是同一個元素
+    if(isSomeVnode(oldStartVnode, newStartVnode)) {
+      // 遞歸
+      patch(oldStartVnode, newStartVnode)
+      // 移動指針
+      oldStartVnode = oldChildren[++oldStartIndex]
+      newStartVnode = newChildren[++newStartIndex]
+    } else if(isSomeVnode(oldEndVnode, newEndVnode)){
+      // 遞歸
+      patch(oldEndVnode, newEndVnode)
+      // 移動指針
+      oldEndVnode = oldChildren[--oldEndIndex]
+      newEndVnode = newChildren[--newEndIndex]
+    } else if(isSomeVnode(oldStartVnode, newEndVnode)) {
+      // 遞歸
+      patch(oldStartVnode, newEndVnode)
+      // 移動指針
+      oldStartVnode = oldChildren[++oldStartIndex]
+      newEndVnode = newChildren[--newEndIndex]
+
+    } else if(isSomeVnode(oldEndVnode, newStartVnode)) {
+      // 遞歸
+      patch(oldEndVnode, newStartVnode)
+      // 移動指針
+      oldEndVnode = oldChildren[--oldEndIndex]
+      newStartVnode = newChildren[++newStartIndex]
+    } else {
+      // 暴力對比
+      // 1. 創建舊元素映射表
+      // 2. 舊元素中尋找元素
+      let moveIndex = map[newStartVnode.key]
+      if(moveIndex == undefined) {
+        // 添加元素
+        parent.insertBefore(createEl(newEndVnode), oldStartVnode.el)
+      } else {
+        // 獲取移動的元素
+        let moveVnode = oldChildren[moveIndex]
+        // 防止數組塌陷
+        oldChildren[moveIndex] = null;
+        // 插入元素
+        parent.insertBefore(moveVnode.el, oldStartVnode.el)
+        // 遞歸內容
+        patch(moveVnode, newStartVnode)
+      }
+      // 新的指針位移
+      newStartVnode = newChildren[++newStartIndex]
+    }
+
+    // 面試題： 為什麼要添加 key ，這個 key 不能是索引
+  }
+
+  //  2. 添加多餘的子元素
+  if(newStartIndex <= newEndIndex) {
+    for (let i = newStartIndex; i <= newEndIndex; i++) {
+      parent.appendChild(createEl(newChildren[i]))
+    }
+  }
+
+  //  3. 刪除多餘元素
+  if(oldStartIndex <= oldEndIndex) {
+    for (let i = oldStartIndex; i <= oldEndIndex; i++) {
+      let child = oldChildren[i]
+      if(child) {
+        parent.removeChild(child.el)
+      }
+    }
+  }
+
 }
 
 // 添加屬性

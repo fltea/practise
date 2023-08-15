@@ -17,7 +17,14 @@ export function lifecycleMixin(Vue) {
   Vue.prototype._update = function (vnode) {
     // console.log(vnode)
     const vm = this;
-    vm.$el = patch(vm.$el, vnode);
+    //  區分首次渲染還是更新
+    let prevVnode = vm._vnode;
+    if(!prevVnode) {
+      vm.$em = vm.$el = patch(vm.$el, vnode);
+      vm._vnode = vnode;
+    } else {
+      patch(prevVnode, vnode);
+    }
   }
 }
 
