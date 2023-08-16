@@ -14,7 +14,7 @@ const starts = {}
 starts.data = function (parentVal, childVal) {
   return childVal
 }
-starts.computed = function () {}
+// starts.computed = function () {}
 // starts.watch = function () {}
 // starts.methods = function () {}
 
@@ -47,9 +47,9 @@ export function mergeOptions(parent, child) {
   function mergeField(key) {
     // 根據 key  策略模式
     if(starts[key]) {
-      options[key]  = starts[key](parent[key], child[key])
+      options[key] = starts[key](parent[key], child[key])
     } else {
-      options[key]  = child[key]
+      options[key] = child[key]
     }
   }
   // console.log(options)

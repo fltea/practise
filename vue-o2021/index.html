@@ -7,7 +7,7 @@
 </head>
 <body>
   <!-- <div id="app" style="color: red;font-size: 20px">hello {{ msg }} <h1>kewq</h1>{{ list }} </div> -->
-  <!-- <div id="app">hello {{ msg }} <h1>666 <span>34343</span></h1></div> -->
+  <div id="app">hello {{ msgStr }}</div>
   <!-- <div id="epp"></div> -->
   <script src="dist/vue.js"></script>
   <script>
@@ -30,43 +30,56 @@
     //     console.log('mixin created 3')
     //   }
     // })
-    // const vm = new Vue({
-    //   el:'#app',
-    //   data() {
-    //     console.log(this)
-    //     return {
-    //       msg: 'dfdf',
-    //       msg1: 'dfdf',
-    //       a: {
-    //         b: 20,
-    //       },
-    //       list: [1,2,4],
-    //       newsl: [{a:2}]
-    //     }
-    //   },
-    //   created(){
-    //     // console.log('created 343dfgfkgj lfgk 454545')
-    //   },
-    //   updated(){
-    //     // console.log('updated 343dfgfkgj lfgk 454545')
-    //   },
-    //   watch: {
-    //     // msg(nv,ov){
-    //     //   console.log(nv)
-    //     // }
-    //     'a.b': {
-    //       handler(v2,v3) {
-    //         console.log('flash handler', this, v2,v3 )
-    //       },
-    //       immediate: true,
-    //     }
-    //   },
-    //   methods: {
-    //     flash(){
-    //       console.log(this, 'flash')
-    //     }
-    //   }
-    // })
+    const vm = new Vue({
+      el:'#app',
+      data() {
+        // console.log(this)
+        return {
+          msg: 'dfdf',
+          msg1: 'dfdf',
+          a: {
+            b: 20,
+          },
+          list: [1,2,4],
+          newsl: [{a:2}]
+        }
+      },
+      computed:{
+        msgStr(){
+          const { msg1, msg } = this
+          return (msg1.indexOf('ms') > -1 ? 'MSSSSS' : msg1) + msg;
+        }
+      },
+      created(){
+        // console.log('created 343dfgfkgj lfgk 454545')
+      },
+      updated(){
+        // console.log('updated 343dfgfkgj lfgk 454545')
+      },
+      watch: {
+        // msg(nv,ov){
+        //   console.log(nv)
+        // }
+        'a.b': {
+          handler(v2,v3) {
+            // console.log('flash handler', this, v2,v3 )
+          },
+          immediate: true,
+        }
+      },
+      methods: {
+        flash(){
+          console.log(this, 'flash')
+        }
+      }
+    })
+
+    // 實例獲取 computed 屬性 通過 Object.defineProperty
+    // console.log(vm.msgStr)
+    // 緩存機製
+    setTimeout(() => {
+      vm.msg1 = 'ms'
+    }, 1000)
 
     // console.log(vm._data.a = {c:30})
     // console.log(vm._data.list.push(100))

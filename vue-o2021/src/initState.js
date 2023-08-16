@@ -1,10 +1,11 @@
 import { observer } from "./observe/index";
 import Watcher from "./observe/watcher";
 import { nextTick } from "./utils/nextTick";
+import Dep from "./observe/dep";
 
 export function initState(vm) {
   let ops = vm.$options;
-  // console.log(ops)
+  console.log('initState',ops,ops.computed)
 
   if(ops.props) {
     initProps(vm)
@@ -21,6 +22,38 @@ export function initState(vm) {
   if(ops.watch) {
     initWatch(vm)
   }
+}
+
+function createComputedGetter(key) {
+  return function () {
+    const watcher = this._computedWatchers[key]
+    if(watcher) {
+      if(watcher.dirty) {
+        watcher.evaluate()
+      }
+      if(Dep.target) {
+        watcher.depend()
+      }
+      return watcher.value;
+    }
+  }
+}
+
+let sharedPropDefinition = {};
+function defineComputed(target, key, userDef) {
+  sharedPropDefinition = {
+    enumerable: true,
+    configurable: true,
+    get: () => {},
+    set: () => {},
+  };
+  if(typeof userDef === 'function') {
+    sharedPropDefinition.get = createComputedGetter(key)
+  } else {
+    sharedPropDefinition.get = createComputedGetter(key)
+    sharedPropDefinition.set = userDef.set
+  }
+  Object.defineProperty(target, key, sharedPropDefinition)
 }
 
 function proxy(vm, source, key){
@@ -54,7 +87,19 @@ function initData(vm){
   observer(data)
 }
 
-function initComputed(vm){}
+function initComputed(vm){
+  const computed = vm.$options.computed;
+  console.log('initComputed', computed)
+  let watcher = vm._computedWatchers = {}
+  for (const key in computed) {
+    if (Object.hasOwnProperty.call(computed, key)) {
+      const userDef = computed[key];
+      let getter = typeof userDef === 'function' ? userDef : userDef.get
+      watcher[key] = new Watcher(vm, getter, () => {}, {lazy: true})
+      defineComputed(vm, key, userDef)
+    }
+  }
+}
 function initWatch(vm){
   let watch = vm.$options.watch;
   // console.log(watch)

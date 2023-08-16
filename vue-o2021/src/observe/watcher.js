@@ -8,6 +8,10 @@ class Watcher {
     this.exprOrFn = exprOrFn;
     this.cb = cb;
     this.options = options;
+
+    this.lazy = options.lazy;
+    this.dirty = this.lazy;
+
     this.user = !!options.user
     this.id = id++;
     this.deps = []
@@ -27,7 +31,7 @@ class Watcher {
     }
 
     // 更新視圖
-    this.value = this.get();
+    this.value = this.lazy ? void 0: this.get();
   }
   addDep(dep) {
     let id = dep.id
@@ -40,7 +44,7 @@ class Watcher {
   // 初次渲染
   get() {
     pushTarget(this)
-    const value = this.getter()
+    const value = this.getter.call(this.vm)
     popTarget()
     return value;
   }
@@ -56,7 +60,23 @@ class Watcher {
   // 更新
   update() {
     // this.getter()
-    queueWatcher(this)
+    if(this.lazy) {
+      this.dirty = true
+    } else {
+      queueWatcher(this)
+    }
+  }
+  evaluate() {
+    this.value = this.get()
+    this.dirty = false;
+  }
+  // 相互收集
+  depend() {
+    // 收集 watcher 存放到 dep 
+    let i = this.deps.length
+    while(i--) {
+      this.deps[i].depend()
+    }
   }
 }
 
