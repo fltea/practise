@@ -10,6 +10,9 @@
 //   return el;
 // }
 export function patch(oldVnode, vnode) { 
+  if(!oldVnode) {
+    return createEl(vnode)
+  }
   // 真實 DOM
   if(oldVnode.nodeType === 1) {
     // 創建真實 DOM
@@ -22,7 +25,7 @@ export function patch(oldVnode, vnode) {
     return el;
   } 
   // diff
-  console.log(oldVnode, vnode)
+  // console.log(oldVnode, vnode)
   // 1. 標籤不一樣
   if(oldVnode.tag !== vnode.tag) {
     oldVnode.el.parentNode.replaceChild(createEl(vnode), oldVnode.el)
@@ -188,9 +191,12 @@ function updateProps(vnode, oldProps = {}) {
 
 // tag, data, key, children, text
 export function createEl(vnode) {
-  const {tag, data, key, children, text} = vnode
+  const {vm, tag, data, key, children, text} = vnode
 
   if(typeof tag === 'string') {
+    if(createComponent(vnode)) {
+      return vnode.componentInstance.$el;
+    }
     vnode.el = document.createElement(tag)
     updateProps(vnode)
     if(children.length > 0) {
@@ -202,6 +208,17 @@ export function createEl(vnode) {
     vnode.el = document.createTextNode(text);
   }
   return vnode.el
+}
+
+function createComponent(vnode) {
+  let i = vnode.data
+  if((i = i.hook) && (i = i.init)) { // 組件
+    i(vnode)
+  }
+  if(vnode.componentInstance) {
+    return true
+  }
+  return false
 }
 
 // 渲染流程 ： 數據初始化 => 模板編譯 => 變成 render 函數 => 通過 render 函數變成 vnode =>  vnode 變成真實 DOM =>  放到頁面

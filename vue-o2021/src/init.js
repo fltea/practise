@@ -8,7 +8,7 @@ export function initMaixin(Vue) {
     // console.log(options)
 
     let vm = this;
-    vm.$options = mergeOptions(Vue.options, options);
+    vm.$options = mergeOptions(this.constructor.options, options);
 
     callHook(vm, 'beforeCreate')
 
@@ -25,7 +25,6 @@ export function initMaixin(Vue) {
 
   // 創建 $mount
   Vue.prototype.$mount = function (el) {
-    // console.log(el)
     let vm = this;
     // 獲取元素
     el = document.querySelector(el)
@@ -40,6 +39,12 @@ export function initMaixin(Vue) {
 
         // 將 變成 render()
         const render = compileToFunction(el);
+        
+        // 將 render 函數變成虛擬 DOM  vnode {}
+        options.render = render;
+      } else if(template) {
+        // 將 變成 render()
+        const render = compileToFunction(template);
         
         // 將 render 函數變成虛擬 DOM  vnode {}
         options.render = render;

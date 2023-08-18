@@ -7,7 +7,10 @@
 </head>
 <body>
   <!-- <div id="app" style="color: red;font-size: 20px">hello {{ msg }} <h1>kewq</h1>{{ list }} </div> -->
-  <div id="app">hello {{ msgStr }}</div>
+  <div id="app">
+    <my-button></my-button>
+    <my-button></my-button>
+  </div>
   <!-- <div id="epp"></div> -->
   <script src="dist/vue.js"></script>
   <script>
@@ -30,6 +33,9 @@
     //     console.log('mixin created 3')
     //   }
     // })
+    Vue.component('my-button', {
+      template: '<button>組件mybutton</button>'
+    })
     const vm = new Vue({
       el:'#app',
       data() {
@@ -44,42 +50,43 @@
           newsl: [{a:2}]
         }
       },
-      computed:{
-        msgStr(){
-          const { msg1, msg } = this
-          return (msg1.indexOf('ms') > -1 ? 'MSSSSS' : msg1) + msg;
-        }
-      },
-      created(){
-        // console.log('created 343dfgfkgj lfgk 454545')
-      },
-      updated(){
-        // console.log('updated 343dfgfkgj lfgk 454545')
-      },
-      watch: {
-        // msg(nv,ov){
-        //   console.log(nv)
-        // }
-        'a.b': {
-          handler(v2,v3) {
-            // console.log('flash handler', this, v2,v3 )
-          },
-          immediate: true,
-        }
-      },
-      methods: {
-        flash(){
-          console.log(this, 'flash')
-        }
-      }
+      // components: { myButton },
+      // computed:{
+      //   msgStr(){
+      //     const { msg1, msg } = this
+      //     return (msg1.indexOf('ms') > -1 ? 'MSSSSS' : msg1) + msg;
+      //   }
+      // },
+      // created(){
+      //   // console.log('created 343dfgfkgj lfgk 454545')
+      // },
+      // updated(){
+      //   // console.log('updated 343dfgfkgj lfgk 454545')
+      // },
+      // watch: {
+      //   // msg(nv,ov){
+      //   //   console.log(nv)
+      //   // }
+      //   'a.b': {
+      //     handler(v2,v3) {
+      //       // console.log('flash handler', this, v2,v3 )
+      //     },
+      //     immediate: true,
+      //   }
+      // },
+      // methods: {
+      //   flash(){
+      //     console.log(this, 'flash')
+      //   }
+      // }
     })
 
     // 實例獲取 computed 屬性 通過 Object.defineProperty
     // console.log(vm.msgStr)
     // 緩存機製
-    setTimeout(() => {
-      vm.msg1 = 'ms'
-    }, 1000)
+    // setTimeout(() => {
+    //   vm.msg1 = 'ms'
+    // }, 1000)
 
     // console.log(vm._data.a = {c:30})
     // console.log(vm._data.list.push(100))
