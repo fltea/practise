@@ -1,4 +1,4 @@
-import { mergeOptions } from "../utils/index";
+import { mergeOptions, toArray } from "../utils/index";
 
 export function initGlobApi(Vue) {
   //  {created:[a,b,c]}
@@ -26,6 +26,23 @@ export function initGlobApi(Vue) {
     Sub.options = mergeOptions(this.options, options)
     return Sub;
   }
+
+  Vue.use = function(plugin) {
+    var installedPlugins = (this._installedPlugins || (this._installedPlugins = []));
+    if(installedPlugins.indexOf(plugin) > -1) {
+      return this;
+    }
+
+    var args = toArray(arguments, 1);
+    args.unshift(this)
+    if(typeof plugin.install === 'function') {
+      plugin.install.apply(plugin, args);
+    } else if (typeof plugin === 'function') {
+      plugin.apply(null, args);
+    }
+    installedPlugins.push(plugin);
+    return this
+  }
 }
 
 /**
@@ -36,3 +53,4 @@ export function initGlobApi(Vue) {
  * 
  *  標籤的渲染 => 獲取 el => Vnode => 真實 Dom
  * */
+
