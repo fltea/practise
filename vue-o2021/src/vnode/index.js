@@ -31,7 +31,7 @@ function Createcomponent(vm, tag, data, children, Ctor) {
     // 初始化組件
     init(vnode) {
       let child = vnode.componentInstance = new vnode.componentOptions.Ctor({})
-      console.log(child)
+      // console.log(child)
       child.$mount() 
     }
   }
