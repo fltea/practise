@@ -25,7 +25,7 @@ function isResved(tag){
 }
 function Createcomponent(vm, tag, data, children, Ctor) {
   if(typeof Ctor === 'object') {
-    Ctor = vm.constructor.extend()
+    Ctor = vm.constructor.extend(Ctor)
   }
   data.hook = {
     // 初始化組件
