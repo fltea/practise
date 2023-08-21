@@ -1,11 +1,7 @@
-export class Store{
-  constructor(options) {
 
-  }
-}
-
+export let Vue;
 export const install = function(_Vue) {
-  const Vue = _Vue;
+  Vue = _Vue;
 
   Vue.mixin({
     beforeCreate(){

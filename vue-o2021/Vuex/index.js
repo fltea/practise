@@ -1,4 +1,5 @@
-import { Store, install } from "./install.js"
+import { Store } from "./store"
+import { install } from "./mixin"
 
 export default {
   Store,
